@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoMaster Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f260;
+            --secondary: #0575E6;
+            --accent: #b92b27;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0f0c29;
+            background-image: linear-gradient(315deg, #0f0c29 0%, #302b63 74%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: hidden;
+            color: var(--text-main);
+        }
+
+        /* Animated Background Canvas */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        /* Glowing Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00f260, #0575E6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(5, 117, 230, 0.5);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00f260, #0575E6);
+            width: 0%;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 242, 96, 0.6);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Question Card */
+        .quiz-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .quiz-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* Options Grid */
+        .options {
+            display: grid;
+            gap: 15px;.option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 18px 25px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Selection States */
+        .option.correct {
+            background: rgba(0, 242, 96, 0.15);
+            border-color: #00f260;
+            box-shadow: 0 0 20px rgba(0, 242, 96, 0.2);
+        }
+
+        .option.incorrect {
+            background: rgba(255, 0, 85, 0.15);
+            border-color: #ff0055;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.2);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(90deg, #0575E6, #00f260);
+            color: #0f0c29;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            width: 100%;
+            box-shadow: 0 0 20px rgba(5, 117, 230, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 242, 96, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(100%);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Screen */
+        .score-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-ring-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 15px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .score-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 15px solid transparent;
+            border-top-color: #00f260;
+            border-right-color: #0575E6;
+            transform: rotate(-45deg);
+            animation: spin 1.5s ease-out forwards;
+        }
+
+        .score-text {
+            text-align: center;
+            z-index: 2;
+        }
+
+        .score-percent {
+            font-size: 3.5rem;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(to right, #00f260, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .result-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-item {
+            text-align: center;
+        }.stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Feedback Message */
+        .feedback-msg {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            min-height: 24px;
+            font-weight: 600;
+        }
+
+        .correct-text { color: #00f260; text-shadow: 0 0 10px rgba(0,242,96,0.3); }
+        .incorrect-text { color: #ff0055; text-shadow: 0 0 10px rgba(255,0,85,0.3); }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 25px; border-radius: 0; height: 100vh; max-width: 100%; }
+            .logo { font-size: 2rem; }
+            .question-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">CRYPTO<span style="color:#00f260">MASTER</span></div>
+            <div class="subtitle">Blockchain Knowledge Protocol</div>
+        </div>
+
+        <div id="start-screen" class="quiz-section active">
+            <div style="text-align: center; margin: 40px 0;">
+                <p style="font-size: 1.2rem; line-height: 1.8; color: #e0e0e0;">
+                    Initialize your knowledge verification.<br>
+                    10 Questions. <br>
+                    Proof of Work required.
+                </p>
+            </div>
+            <button class="btn" onclick="startQuiz()">Initialize Quiz</button>
+        </div>
+
+        <div id="quiz-screen" class="quiz-section">
+            <div class="progress-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            
+            <div class="question-counter" style="text-align: right; margin-bottom: 10px; color: var(--text-muted);">
+                Question <span id="current-question" style="color: #fff; font-weight: bold;">1</span> / <span id="total-questions">10</span>
+            </div>
+
+            <div class="question-text" id="question-text"></div>
+            
+            <div class="options" id="options-container"></div>
+
+            <div class="feedback-msg" id="feedback"></div>
+
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Next Block</button>
+        </div>
+
+        <div id="results-screen" class="quiz-section">
+            <h2 style="text-align: center; margin-bottom: 30px; font-family: 'Orbitron';">AUDIT COMPLETE</h2>
+            
+            <div class="score-container">
+                <div class="score-ring-bg"></div>
+                <div class="score-ring" id="final-ring"></div>
+                <div class="score-text">
+                    <div class="score-percent" id="score-percentage">0%</div>
+                    <div class="score-label">Success Rate</div>
+                </div>
+            </div>
+
+            <p id="results-message" style="text-align: center; margin-bottom: 30px; font-size: 1.2rem;"></p>
+
+            <div class="result-stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="correct-count" style="color: #00f260">0</span>
+                    <span class="stat-label">Correct</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="incorrect-count" style="color: #ff0055">0</span>
+                    <span class="stat-label">Incorrect</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="restartQuiz()">Reboot System</button>
+        </div>
+    </div><script>
+        // --- 1. QUIZ DATA ---
+        const quizData = [
+            { question: "Who is the anonymous creator of Bitcoin?", options: ["Vitalik Buterin", "Satoshi Nakamoto", "Elon Musk", "Charlie Lee"], correct: 1 },
+            { question: "What is the maximum supply of Bitcoin that will ever exist?", options: ["100 Million", "Unlimited", "21 Million", "18 Million"], correct: 2 },
+            { question: "What does 'DeFi' stand for?", options: ["Digital Finance", "Decentralized Finance", "Distributed Fintech", "Daily Finance"], correct: 1 },
+            { question: "Which term describes a cryptocurrency held offline for security?", options: ["Cold Wallet", "Hot Wallet", "Hard Drive", "Soft Wallet"], correct: 0 },
+            { question: "What is the name of the digital ledger technology that powers cryptocurrencies?", options: ["Cloud Computing", "Blockchain", "Machine Learning", "Big Data"], correct: 1 },
+            { question: "What does 'HODL' mean?", options: ["Hold On for Dear Life", "Have One Digital Ledger", "High Order Digital Link", "Hold On Don't Lie"], correct: 0 },
+            { question: "Which cryptocurrency is known as the 'Silver to Bitcoin's Gold'?", options: ["Ethereum", "Ripple (XRP)", "Litecoin", "Cardano"], correct: 2 },
+            { question: "What is a 'Stablecoin'?", options: ["A coin that only goes up", "A coin pegged to an asset (e.g. USD)", "A coin with no volatility", "A coin used for staking only"], correct: 1 },
+            { question: "What is the process of verifying transactions and adding them to the blockchain?", options: ["Staking", "Mining", "Minting", "Trading"], correct: 1 },
+            { question: "What does NFT stand for?", options: ["New File Type", "Non-Fungible Token", "Network File Transfer", "No Fee Transaction"], correct: 1 }
+        ];
+
+        // --- 2. QUIZ LOGIC ---
+        let currentQuestion = 0;
+        let score = 0;
+        let quizCompleted = false;
+
+        function startQuiz() {
+            switchScreen('start-screen', 'quiz-screen');
+            document.getElementById('total-questions').textContent = quizData.length;
+            loadQuestion();
+        }
+
+        function switchScreen(hideId, showId) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+            hideEl.classList.remove('active');
+            setTimeout(() => {
+                hideEl.style.display = 'none';
+                showEl.style.display = 'block';
+                setTimeout(() => showEl.classList.add('active'), 50);
+            }, 400);
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const question = quizData[currentQuestion];
+            document.getElementById('current-question').textContent = currentQuestion + 1;
+            document.getElementById('question-text').textContent = question.question;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'option';
+                btn.innerHTML = <span style="margin-right:10px; opacity:0.5;">${String.fromCharCode(65+index)}.</span> ${option};
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            const progress = (currentQuestion / quizData.length) * 100;
+            document.getElementById('progress-fill').style.width = ${progress}%;
+
+            document.getElementById('next-btn').disabled = true;
+            document.getElementById('feedback').innerHTML = '';
+        }function checkAnswer(selectedIndex, optionElement) {
+            const options = document.querySelectorAll('.option');
+            // Disable clicks
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+
+            const correctIndex = quizData[currentQuestion].correct;
+            const isCorrect = selectedIndex === correctIndex;
+
+            if (isCorrect) {
+                optionElement.classList.add('correct');
+                score++;
+                document.getElementById('feedback').innerHTML = '<span class="correct-text">ACCESS GRANTED</span>';
+                triggerConfetti();
+            } else {
+                optionElement.classList.add('incorrect');
+                options[correctIndex].classList.add('correct');
+                document.getElementById('feedback').innerHTML = '<span class="incorrect-text">ACCESS DENIED</span>';
+            }
+
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            switchScreen('quiz-screen', 'results-screen');
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('score-percentage').textContent = percentage + '%';
+            document.getElementById('correct-count').textContent = score;
+            document.getElementById('incorrect-count').textContent = quizData.length - score;
+
+            let message = '';
+            if (percentage >= 80) message = "💎 Diamond Hands! You are a Crypto Whale!";
+            else if (percentage >= 60) message = "🚀 To the Moon! Solid knowledge.";
+            else if (percentage >= 40) message = "📉 Bear Market... Keep studying.";
+            else message = "🛑 Rekt! Time to read the whitepaper.";
+            
+            document.getElementById('results-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            switchScreen('results-screen', 'start-screen');
+        }
+
+        // --- 3. BACKGROUND ANIMATION (Network Nodes) ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.size = Math.random() * 2 + 1;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 242, 96, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 60; i++) particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i; j < particles.length; j++) {
+        }const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        ctx.strokeStyle = rgba(5, 117, 230, ${1 - distance/150});
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles();
+        animateParticles();
+
+        // --- 4. CONFETTI EFFECT ---
+        const cCanvas = document.getElementById('confetti-canvas');
+        const cCtx = cCanvas.getContext('2d');
+        let confetti = [];
+
+        function resizeConfetti() {
+            cCanvas.width = window.innerWidth;
+            cCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfetti);
+        resizeConfetti();
+
+        function triggerConfetti() {
+            for (let i = 0; i < 100; i++) {
+                confetti.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20,
+                    color: hsl(${Math.random() * 360}, 100%, 50%),
+                    life: 100
+                });
+            }
+        }
+
+        function animateConfetti() {
+            cCtx.clearRect(0, 0, cCanvas.width, cCanvas.height);
+            for (let i = 0; i < confetti.length; i++) {
+                let p = confetti[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.5; // Gravity
+                p.life--;
+                cCtx.fillStyle = p.color;
+                cCtx.fillRect(p.x, p.y, 5, 5);
+            }
+            confetti = confetti.filter(p => p.life > 0);
+            requestAnimationFrame(animateConfetti);
+        }
+        animateConfetti();
+
+    </script>
+</body>
+</html>
