@@ -5,3 +5,4 @@ Day 1 - Improved README slightly
 Day 1 - Understanding version control
 Day 1 - Making another small edit
 Day 1 - Keeping commits consistent
+Day 1 - Minor formatting change
