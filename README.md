@@ -15,3 +15,4 @@ Day 2 - Small improvement again
 Day 2 - Learning Git basics
 Day 2 - Editing file again
 Day 2 - Fixed small typo
+Day 2 - Added another line
