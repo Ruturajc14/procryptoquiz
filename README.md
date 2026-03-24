@@ -17,3 +17,4 @@ Day 2 - Editing file again
 Day 2 - Fixed small typo
 Day 2 - Added another line
 Day 2 - Practicing consistency
+Day 2 - Completed second day
