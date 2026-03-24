@@ -9,3 +9,4 @@ Day 1 - Keeping commits consistent
 Day 1 - Minor formatting change
 Day 1 - Completed today progress
 Day 2 - Continuing commit practice
+Day 2 - Added new learning note
