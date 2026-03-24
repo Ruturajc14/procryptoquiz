@@ -8,3 +8,4 @@ Day 1 - Making another small edit
 Day 1 - Keeping commits consistent
 Day 1 - Minor formatting change
 Day 1 - Completed today progress
+Day 2 - Continuing commit practice
