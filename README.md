@@ -20,3 +20,4 @@ Day 2 - Practicing consistency
 Day 2 - Completed second day
 Day 3 - Learning markdown basics
 Day 3 - Added headings
+Day 3 - Improved formatting
