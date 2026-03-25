@@ -26,3 +26,4 @@ Day 3 - Practicing commits again
 Day 3 - Updated notes
 Day 3 - Minor improvements
 Day 3 - Learning by doing
+Day 3 - Another small change
