@@ -22,3 +22,4 @@ Day 3 - Learning markdown basics
 Day 3 - Added headings
 Day 3 - Improved formatting
 Day 3 - Added bullet points
+Day 3 - Practicing commits again
