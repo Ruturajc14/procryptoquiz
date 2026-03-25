@@ -24,3 +24,4 @@ Day 3 - Improved formatting
 Day 3 - Added bullet points
 Day 3 - Practicing commits again
 Day 3 - Updated notes
+Day 3 - Minor improvements
