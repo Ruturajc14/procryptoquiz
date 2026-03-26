@@ -32,3 +32,4 @@ Day 4 - Improving consistency
 Day 4 - Editing previous work
 Day 4 - Cleaned formatting
 Day 4 - Added new update
+Day 4 - Practicing small commits
