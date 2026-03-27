@@ -43,3 +43,4 @@ Day 5 - Adding final updates
 Day 5 - Reviewing changes
 Day 5 - Small improvement again
 Day 5 - Almost reaching goal
+Day 5 - Staying consistent
