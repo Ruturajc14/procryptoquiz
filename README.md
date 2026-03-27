@@ -48,3 +48,4 @@ Day 5 - Final edits
 Day 5 - Cleaning up file
 Day 5 - Completed all commits
 Day 5 - 50 commits goal achieved
+Extra update - fixing commit count
