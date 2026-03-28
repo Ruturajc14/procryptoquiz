@@ -53,3 +53,4 @@ Day 6 - Starting new set of commits
 Day 6 - Continuing consistency
 Day 6 - Small improvement again
 Day 6 - Learning daily workflow
+Day 6 - Editing README content
