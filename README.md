@@ -72,3 +72,4 @@ Day 7 - Completed seventh day
 Day 8 - Starting new updates
 Day 8 - Improving commit habits
 Day 8 - Practicing more edits
+Day 8 - Updating README again
