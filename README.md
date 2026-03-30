@@ -73,3 +73,4 @@ Day 8 - Starting new updates
 Day 8 - Improving commit habits
 Day 8 - Practicing more edits
 Day 8 - Updating README again
+Day 8 - Small formatting fix
