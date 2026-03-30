@@ -69,3 +69,4 @@ Day 7 - Minor improvement
 Day 7 - Adding another update
 Day 7 - Keeping progress steady
 Day 7 - Completed seventh day
+Day 8 - Starting new updates
