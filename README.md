@@ -75,3 +75,4 @@ Day 8 - Practicing more edits
 Day 8 - Updating README again
 Day 8 - Small formatting fix
 Day 8 - Learning GitHub usage
+Day 8 - Adding more content
