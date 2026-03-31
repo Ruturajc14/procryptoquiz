@@ -83,3 +83,4 @@ Day 9 - Continuing progress
 Day 9 - Adding new commit
 Day 9 - Practicing again
 Day 9 - Updating content
+Day 9 - Small improvement
