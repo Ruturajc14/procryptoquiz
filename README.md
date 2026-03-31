@@ -84,3 +84,4 @@ Day 9 - Adding new commit
 Day 9 - Practicing again
 Day 9 - Updating content
 Day 9 - Small improvement
+Day 9 - Learning consistency
