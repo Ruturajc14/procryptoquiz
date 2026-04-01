@@ -98,3 +98,4 @@ Day 10 - Almost reaching goal
 Day 10 - Staying consistent
 Day 10 - Final edits
 Day 10 - Completing all commits
+Day 10 - 100 commits goal achieved
